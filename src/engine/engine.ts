@@ -1,6 +1,6 @@
-import { assets } from './asset';
-import { gameobject } from './gameobject';
-import { point } from './metric';
+import { assets } from './asset.js';
+import { gameobject } from './gameobject.js';
+import { point } from './metric.js';
 
 
 export class engine {
@@ -21,13 +21,13 @@ export class engine {
     constructor(public readonly width: number, public readonly height: number, canvas: HTMLCanvasElement) {
         canvas.width = this.width;
         canvas.height = this.height;
-        canvas.onclick = this.handle_click;
+        canvas.onclick = (e) => this.handle_click(e);
         this.ctx = canvas.getContext('2d')!;
         engine.eng = this;
     }
 
     start() {
-        window.requestAnimationFrame(this.loop);
+        window.requestAnimationFrame(() => this.loop());
     }
 
     private loop() {
@@ -35,11 +35,13 @@ export class engine {
         this.oldTimeStamp = this.timeStamp;
         this.update(secondsPassed);
         this.check_collisions();
-        this.remove_all();
-        this.add_all();
+        if (this.to_remove_gameobjects.length)
+            this.remove_all();
+        if (this.to_add_gameobjects.length)
+            this.add_all();
         this.clear();
         this.draw();
-        window.requestAnimationFrame(this.loop);
+        window.requestAnimationFrame(() => this.loop());
     }
 
     private update(dt: number) {
@@ -48,6 +50,7 @@ export class engine {
     }
 
     private clear() {
+        this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.fill();
     }
@@ -66,7 +69,7 @@ export class engine {
     }
 
     private add_all() {
-        this.gameobjects.concat(this.to_add_gameobjects);
+        this.gameobjects = this.gameobjects.concat(this.to_add_gameobjects);
         for (const g of this.to_add_gameobjects)
             g.start();
         this.to_add_gameobjects = [];
@@ -92,10 +95,12 @@ export class engine {
         if (e.button != 0)
             return;
         for (const obj of this.gameobjects)
+        {
             if (obj.collider.contains(pt))
             {
                 obj.clicked(pt);
                 break;
             }
+        }
     }
 }
