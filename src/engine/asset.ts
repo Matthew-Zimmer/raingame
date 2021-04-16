@@ -1,4 +1,5 @@
-import { point } from './metric';
+import { collider } from './collider.js';
+import { point, size } from './metric.js';
 
 export class asset {
     constructor(private img: HTMLImageElement){
@@ -14,8 +15,12 @@ export class asset {
         return new asset(img);
     }
 
-    draw(ctx: CanvasRenderingContext2D, pt: point) {
-        ctx.drawImage(this.img, pt.x, pt.y);
+    draw(ctx: CanvasRenderingContext2D, collider: collider) {
+        ctx.drawImage(this.img, collider.pos.x, collider.pos.y, collider.size.w, collider.size.h);
+    }
+
+    size(): size {
+        return { w: this.img.width, h: this.img.height };
     }
 }
 
@@ -28,8 +33,14 @@ export class assets {
     }
 
     private async load_image(filename: string) {
-        const id = filename.split('.')[0];
-        this.assets.set(id, await asset.load(filename));
+        const regex = /assets\/(.*)\..*/;
+        if (regex.test(filename))
+        {
+            const id = regex.exec(filename)![1];
+            this.assets.set(id, await asset.load(filename));
+        }
+        else
+            throw 'bad filename';
     }
 
     get(id: string): asset {

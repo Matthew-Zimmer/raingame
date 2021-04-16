@@ -1,4 +1,4 @@
-import { point, size } from './metric';
+import { point, size } from './metric.js';
 
 export class collider {
     constructor(public pos: point, public size: size) {
