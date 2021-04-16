@@ -9,3 +9,4 @@ function main() {
     ctx.fillStyle = 'white';
     ctx.fillText('Hello world', 20, 50);
 }
+
