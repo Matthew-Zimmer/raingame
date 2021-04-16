@@ -15,4 +15,7 @@ export abstract class gameobject {
     collided_with(other: gameobject) {}
     start() {}
     end() {}
+    pos(){
+        return this.collider.pos;
+    }
 }
