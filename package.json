@@ -1,0 +1,21 @@
+{
+  "name": "raingame",
+  "version": "1.0.0",
+  "description": "The remake of the rain game!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc -p .",
+    "start": "firefox build/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matthew-Zimmer/raingame.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matthew-Zimmer/raingame/issues"
+  },
+  "homepage": "https://github.com/Matthew-Zimmer/raingame#readme"
+}
