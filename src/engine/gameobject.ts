@@ -17,6 +17,10 @@ export abstract class gameobject {
     start() {}
     end() {}
 
+    pos(){
+        return this.collider.pos;
+    }
+
     eq(other: gameobject) {
         return this.id == other.id;
     }
