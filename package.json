@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "tsc -p . && cp src/index.html build/index.html",
-    "start": "firefox build/index.html"
+    "start": "firefox build/index.html",
+    "host": "cd build && python -m SimpleHTTPServer 3000"
   },
   "repository": {
     "type": "git",
