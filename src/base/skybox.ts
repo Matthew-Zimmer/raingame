@@ -1,7 +1,6 @@
-import { asset } from "./engine/asset";
-import { engine } from "./engine/engine";
-import { gameobject } from "./engine/gameobject";
-import { point } from "./engine/metric";
+import { engine } from "../engine/engine";
+import { gameobject } from "../engine/gameobject";
+import { point } from "../engine/metric";
 import { rain } from "./rain";
 
 export class skybox extends gameobject {
