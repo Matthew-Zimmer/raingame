@@ -15,4 +15,11 @@ export class collider {
         const h2 = other.size.h;
         return x1 + w1 < x2 || x2 + w2 < x1 || y1 + h1 < y2 || y2 + h2 < y1;
     }
+
+    contains(pt: point) {
+        return  this.pos.x <= pt.x && 
+                pt.x <= this.pos.x + this.size.w && 
+                this.pos.y <= pt.y && 
+                pt.y <= this.pos.y + this.size.h;
+    }
 }
