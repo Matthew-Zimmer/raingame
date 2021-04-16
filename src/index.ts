@@ -1,7 +1,7 @@
 import { engine } from "./engine/engine";
 
 const asset_files: string[] = [
-    
+    'raindrop.png'
 ];
 
 export async function main() {
