@@ -18,7 +18,7 @@ export class engine {
 
     private ctx: CanvasRenderingContext2D;
 
-    constructor(private width: number, private height: number, canvas: HTMLCanvasElement) {
+    constructor(public readonly width: number, public readonly height: number, canvas: HTMLCanvasElement) {
         canvas.width = this.width;
         canvas.height = this.height;
         canvas.onclick = this.handle_click;

@@ -1,7 +1,7 @@
-import { asset } from './engine/asset';
-import { engine } from './engine/engine';
-import { gameobject } from './engine/gameobject';
-import { point } from './engine/metric';
+import { asset } from '../engine/asset';
+import { engine } from '../engine/engine';
+import { gameobject } from '../engine/gameobject';
+import { point } from '../engine/metric';
 
 export class rain extends gameobject {
 
