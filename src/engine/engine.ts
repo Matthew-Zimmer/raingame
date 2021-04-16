@@ -15,7 +15,7 @@ export class engine {
 
     public assets: assets = new assets();
 
-    constructor(private width: number, private height: number, private ctx: CanvasRenderingContext2D) {
+    constructor(public readonly width: number, public readonly height: number, private ctx: CanvasRenderingContext2D) {
         engine.eng = this;
     }
 
