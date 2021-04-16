@@ -1,3 +1,4 @@
+import { assets } from './asset';
 import { gameobject } from './gameobject';
 
 
@@ -11,6 +12,8 @@ export class engine {
 
     private to_add_gameobjects: Map<number, gameobject> = new Map();
     private to_remove_gameobjects: Map<number, gameobject> = new Map();
+
+    public assets: assets = new assets();
 
     constructor(private width: number, private height: number, private ctx: CanvasRenderingContext2D) {
         engine.eng = this;

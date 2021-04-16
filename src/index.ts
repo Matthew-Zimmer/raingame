@@ -1,11 +1,24 @@
+import { engine } from "./engine/engine";
 
-function main() {
-    const ctx = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d')!;
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, 10000, 1000);
-    ctx.fill();
+const asset_files: string[] = [
     
-    ctx.font = '36px serif';
-    ctx.fillStyle = 'white';
-    ctx.fillText('Hello world', 20, 50);
+];
+
+export async function main() {
+
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+
+    const width = window.screen.width;
+    const height = window.screen.height;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d')!;
+
+    const eng = new engine(width, height, ctx);
+    
+    await eng.assets.load_images(asset_files.map(x => `assets/${x}`));
+
+    eng.start();
 }
