@@ -8,8 +8,8 @@ export class ground extends gameobject {
     private texture: asset;
 
     constructor(pt: point) {
-        super('ground', pt, { w: 16, h: 16 });
-        this.texture = engine.eng.assets.get('raindrop');
+        super('ground', pt, { w: 64, h: 64 });
+        this.texture = engine.eng.assets.get('ground');
     }
 
     draw(ctx: CanvasRenderingContext2D) {

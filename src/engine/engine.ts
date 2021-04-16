@@ -83,11 +83,25 @@ export class engine {
     }
 
     private check_collisions() {
+        const pairs: Map<number, Set<number>> = new Map(new Set());
         for (const g1 of this.gameobjects)
             for (const g2 of this.gameobjects)
                 if (!g1.eq(g2))
-                    if (g1.collider.intersects_with(g2.collider))
+                    if (g1.collider.intersects_with(g2.collider) && !pairs.get(g1.id)?.has(g2.id))
+                    {
                         g1.collided_with(g2);
+                        g2.collided_with(g1);
+                        
+                        if (pairs.has(g1.id))
+                            pairs.get(g1.id)!.add(g2.id);
+                        else
+                            pairs.set(g1.id, new Set([g2.id]));
+
+                        if (pairs.has(g2.id))
+                            pairs.get(g2.id)!.add(g1.id);
+                        else
+                            pairs.set(g2.id, new Set([g1.id]));
+                    }
     }
 
     private handle_click(e: MouseEvent) {
