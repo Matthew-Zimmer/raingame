@@ -2,6 +2,8 @@ import { asset } from '../engine/asset.js';
 import { engine } from '../engine/engine.js';
 import { gameobject } from '../engine/gameobject.js';
 import { point } from '../engine/metric.js';
+import { random_plant_stats } from './feature/plant.js';
+import { plant } from './plant.js';
 
 export class ground extends gameobject {
 
@@ -17,8 +19,11 @@ export class ground extends gameobject {
     }
 
     collided_with(other: gameobject) {
-        if (other.kind == 'rain_drop') {
+        if (other.kind === 'rain_drop') {
             engine.eng.remove(other);
+            if (Math.random() < 0.3) {
+                engine.eng.add(new plant(new point(0,0), random_plant_stats()));
+            }
         }
     }
 }

@@ -2,43 +2,31 @@ import { asset } from '../engine/asset.js';
 import { engine } from '../engine/engine.js';
 import { gameobject } from '../engine/gameobject.js';
 import { point } from '../engine/metric.js';
-import { item } from './item.js';
+import { plant_feature, plant_stats } from './feature/plant.js';
 
 
-
-
-const plant_resouces= {
-    wheat: new item("wheat", 2),
-    cabbage: new item("cabbage", 2)
-}
-
-export class plant extends gameobject {
+export class plant extends gameobject<plant_feature> {
     private texture: asset;
-    growth: number = 0;
-    constructor(pt: point, public type: keyof typeof plant_resouces, public ripe: number) {
-        super('plant', pt, { w: 16, h: 16 });
+
+    constructor(pt: point, stats: plant_stats) {
+        super('plant',pt,{ w: 16, h: 16 }, new plant_feature(stats));
         this.texture = engine.eng.assets.get('plant');   
+    }
+
+    private update_plant_texture = (stage: number) => {
+        this.texture = engine.eng.assets.get('plant');
+    }
+
+    start(){
+        this.feature.subscribe_to("on_grow", this.update_plant_texture);
     }
 
     draw(ctx: CanvasRenderingContext2D) {
         this.texture.draw(ctx, this.collider);
     }
 
-    grow()
-    {
-        if(this.growth + 1 < this.ripe)
-        {
-            this.growth++;
-        }
-    }
-    
-    harvest()
-    {
-        if(this.growth == this.ripe)
-        {
-            this.growth = 0;
-            return plant_resouces[this.type];
-        }
-        return undefined;
+    collided_with(g: gameobject) {
+        if (g.kind === 'raindrop')
+            this.feature.grow();
     }
 }
