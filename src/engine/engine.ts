@@ -1,24 +1,26 @@
 import { assets } from './asset.js';
+import { event_server } from './event.js';
 import { gameobject } from './gameobject.js';
+import { global_events } from './global_events.js';
 import { point } from './metric.js';
 
-
-export class engine {
+export class engine extends event_server(global_events) {
     private timeStamp: number = 0;
     private oldTimeStamp: number = 0;
 
     static eng: engine;
 
-    private gameobjects: gameobject[] = [];
+    private gameobjects: gameobject<any>[] = [];
 
-    private to_add_gameobjects: gameobject[] = [];
-    private to_remove_gameobjects: gameobject[] = [];
+    private to_add_gameobjects: gameobject<any>[] = [];
+    private to_remove_gameobjects: gameobject<any>[] = [];
 
     public assets: assets = new assets();
 
     private ctx: CanvasRenderingContext2D;
 
     constructor(public readonly width: number, public readonly height: number, canvas: HTMLCanvasElement) {
+        super();
         canvas.width = this.width;
         canvas.height = this.height;
         canvas.onclick = (e) => this.handle_click(e);
@@ -60,25 +62,29 @@ export class engine {
             obj.draw(this.ctx);
     }
     
-    add(g: gameobject) {
+    add(g: gameobject<any>) {
         this.to_add_gameobjects.push(g);
     }
 
-    remove(g: gameobject) {
+    remove(g: gameobject<any>) {
         this.to_remove_gameobjects.push(g);
     }
 
     private add_all() {
         this.gameobjects = this.gameobjects.concat(this.to_add_gameobjects);
-        for (const g of this.to_add_gameobjects)
+        for (const g of this.to_add_gameobjects) {
             g.start();
+            (g as any)._start();
+        }
         this.to_add_gameobjects = [];
     }
 
     private remove_all() {
         this.gameobjects = this.gameobjects.filter(x => !this.to_remove_gameobjects.some(y => y.eq(x)));
-        for (const g of this.to_remove_gameobjects)
+        for (const g of this.to_remove_gameobjects) {
             g.end();
+            (g as any)._end();
+        }
         this.to_remove_gameobjects = [];
     }
 
@@ -105,7 +111,7 @@ export class engine {
     }
 
     private handle_click(e: MouseEvent) {
-        const pt: point = { x: e.x, y: e.y };
+        const pt = new point(e.x, e.y);
         if (e.button != 0)
             return;
         for (const obj of this.gameobjects)

@@ -8,7 +8,7 @@ export class rain extends gameobject {
     private texture: asset;
 
     constructor(pt: point) {
-        super('rain_drop', pt, { w: 16, h: 16 });
+        super('rain_drop', pt, { w: 16, h: 16 }, {});
         this.texture = engine.eng.assets.get('raindrop');   
     }
 
