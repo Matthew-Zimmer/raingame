@@ -8,7 +8,7 @@ export class ground extends gameobject {
     private texture: asset;
 
     constructor(pt: point) {
-        super('ground', pt, { w: 64, h: 64 });
+        super('ground', pt, { w: 64, h: 64 }, {});
         this.texture = engine.eng.assets.get('ground');
     }
 
