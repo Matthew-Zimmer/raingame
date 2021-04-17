@@ -1,6 +1,6 @@
-import { assets } from './asset';
-import { gameobject } from './gameobject';
-import { point } from './metric';
+import { assets } from './asset.js';
+import { gameobject } from './gameobject.js';
+import { point } from './metric.js';
 
 
 export class engine {
@@ -21,13 +21,13 @@ export class engine {
     constructor(public readonly width: number, public readonly height: number, canvas: HTMLCanvasElement) {
         canvas.width = this.width;
         canvas.height = this.height;
-        canvas.onclick = this.handle_click;
+        canvas.onclick = (e) => this.handle_click(e);
         this.ctx = canvas.getContext('2d')!;
         engine.eng = this;
     }
 
     start() {
-        window.requestAnimationFrame(this.loop);
+        window.requestAnimationFrame(() => this.loop());
     }
 
     private loop() {
@@ -35,11 +35,13 @@ export class engine {
         this.oldTimeStamp = this.timeStamp;
         this.update(secondsPassed);
         this.check_collisions();
-        this.remove_all();
-        this.add_all();
+        if (this.to_remove_gameobjects.length)
+            this.remove_all();
+        if (this.to_add_gameobjects.length)
+            this.add_all();
         this.clear();
         this.draw();
-        window.requestAnimationFrame(this.loop);
+        window.requestAnimationFrame(() => this.loop());
     }
 
     private update(dt: number) {
@@ -48,6 +50,7 @@ export class engine {
     }
 
     private clear() {
+        this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.width, this.height);
         this.ctx.fill();
     }
@@ -66,7 +69,7 @@ export class engine {
     }
 
     private add_all() {
-        this.gameobjects.concat(this.to_add_gameobjects);
+        this.gameobjects = this.gameobjects.concat(this.to_add_gameobjects);
         for (const g of this.to_add_gameobjects)
             g.start();
         this.to_add_gameobjects = [];
@@ -80,11 +83,25 @@ export class engine {
     }
 
     private check_collisions() {
+        const pairs: Map<number, Set<number>> = new Map(new Set());
         for (const g1 of this.gameobjects)
             for (const g2 of this.gameobjects)
                 if (!g1.eq(g2))
-                    if (g1.collider.intersects_with(g2.collider))
+                    if (g1.collider.intersects_with(g2.collider) && !pairs.get(g1.id)?.has(g2.id))
+                    {
                         g1.collided_with(g2);
+                        g2.collided_with(g1);
+                        
+                        if (pairs.has(g1.id))
+                            pairs.get(g1.id)!.add(g2.id);
+                        else
+                            pairs.set(g1.id, new Set([g2.id]));
+
+                        if (pairs.has(g2.id))
+                            pairs.get(g2.id)!.add(g1.id);
+                        else
+                            pairs.set(g2.id, new Set([g1.id]));
+                    }
     }
 
     private handle_click(e: MouseEvent) {
@@ -92,10 +109,12 @@ export class engine {
         if (e.button != 0)
             return;
         for (const obj of this.gameobjects)
+        {
             if (obj.collider.contains(pt))
             {
                 obj.clicked(pt);
                 break;
             }
+        }
     }
 }

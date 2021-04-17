@@ -3,23 +3,22 @@ import { engine } from '../engine/engine.js';
 import { gameobject } from '../engine/gameobject.js';
 import { point } from '../engine/metric.js';
 
-export class rain extends gameobject {
+export class ground extends gameobject {
 
     private texture: asset;
 
     constructor(pt: point) {
-        super('rain_drop', pt, { w: 16, h: 16 });
-        this.texture = engine.eng.assets.get('raindrop');   
+        super('ground', pt, { w: 64, h: 64 });
+        this.texture = engine.eng.assets.get('ground');
     }
 
     draw(ctx: CanvasRenderingContext2D) {
         this.texture.draw(ctx, this.collider);
     }
 
-    update() {
-        const speed: number = 10;
-        const wind_speed: number = 0;
-        this.pos().x += wind_speed;
-        this.pos().y += speed;
+    collided_with(other: gameobject) {
+        if (other.kind == 'rain_drop') {
+            engine.eng.remove(other);
+        }
     }
 }
