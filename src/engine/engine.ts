@@ -10,10 +10,10 @@ export class engine extends event_server(global_events) {
 
     static eng: engine;
 
-    private gameobjects: gameobject<any>[] = [];
+    private gameobjects: gameobject[] = [];
 
-    private to_add_gameobjects: gameobject<any>[] = [];
-    private to_remove_gameobjects: gameobject<any>[] = [];
+    private to_add_gameobjects: gameobject[] = [];
+    private to_remove_gameobjects: gameobject[] = [];
 
     public assets: assets = new assets();
 
@@ -62,11 +62,11 @@ export class engine extends event_server(global_events) {
             obj.draw(this.ctx);
     }
     
-    add(g: gameobject<any>) {
+    add(g: gameobject) {
         this.to_add_gameobjects.push(g);
     }
 
-    remove(g: gameobject<any>) {
+    remove(g: gameobject) {
         this.to_remove_gameobjects.push(g);
     }
 

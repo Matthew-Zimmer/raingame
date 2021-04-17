@@ -5,7 +5,7 @@ import { point, size } from './metric.js';
 
 let gameobject_count = 0;
 
-export abstract class gameobject<T = {}> {
+export abstract class gameobject<T = any> {
     public collider: collider;
 
     private events: Map<keyof typeof global_events, number> = new Map();
@@ -16,7 +16,7 @@ export abstract class gameobject<T = {}> {
 
     draw(ctx: CanvasRenderingContext2D) { }
     update(dt: number) {}
-    collided_with(other: gameobject<any>) {}
+    collided_with(other: gameobject) {}
     clicked(pt: point) {}
     start() {}
     end() {}
@@ -31,23 +31,23 @@ export abstract class gameobject<T = {}> {
         return this.collider.pos;
     }
 
-    eq(other: gameobject<any>) {
+    eq(other: gameobject) {
         return this.id == other.id;
     }
 
-    subscribe_to<T extends keyof typeof global_events>(event: T, callback: (typeof global_events)[T][0][0], cond = () => true) {
+    subscribe_to<U extends keyof typeof global_events>(event: U, callback: (typeof global_events)[U][0][0], cond = () => true) {
         if (this.events.has(event))
             throw `already subscribed to ${event}`;
         this.events.set(event, engine.eng.subscribe_to(event, callback, cond));
     }
 
-    unsubscribe_from<T extends keyof typeof global_events>(event: T) {
+    unsubscribe_from<U extends keyof typeof global_events>(event: U) {
         if (!this.events.has(event))
             throw `not subscribed to ${event}`;
         engine.eng.unsubscribe_from(event, this.events.get(event)!);
     }
 
-    notify_all<T extends keyof typeof global_events>(event: T, executer: (cb: (typeof global_events)[T][0][0]) => void) {
+    notify_all<U extends keyof typeof global_events>(event: U, executer: (cb: (typeof global_events)[U][0][0]) => void) {
         engine.eng.notify_all(event, executer);
     }
 }
