@@ -3,7 +3,8 @@ import { engine } from "./engine/engine.js";
 
 const asset_files: string[] = [
     'raindrop.png',
-    'ground.png'
+    'ground.png',
+    'wheat_1.png'
 ];
 
 export async function start() {
