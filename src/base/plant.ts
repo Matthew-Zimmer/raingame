@@ -14,7 +14,19 @@ export class plant extends gameobject<plant_feature> {
     }
 
     private update_plant_texture = (stage: number) => {
-        this.texture = engine.eng.assets.get('plant');
+        if(stage == 0)
+        {
+            this.texture = engine.eng.assets.get('seed');
+        }
+        else if(stage == 1)
+        {
+            this.texture = engine.eng.assets.get('plant_bud');
+        }
+        else if(stage == 2)
+        {
+            this.texture = engine.eng.assets.get('plant_ripe');
+        }
+        
     }
 
     start(){
@@ -27,6 +39,6 @@ export class plant extends gameobject<plant_feature> {
 
     collided_with(g: gameobject) {
         if (g.kind === 'raindrop')
-            this.feature.grow();
+            this.feature.wateredd();
     }
 }
