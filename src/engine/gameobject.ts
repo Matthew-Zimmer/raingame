@@ -10,6 +10,8 @@ export abstract class gameobject<T = any> {
 
     private events: Map<keyof typeof global_events, number> = new Map();
 
+    private timer_events: Set<number> = new Set();
+
     constructor(public kind: string, pt: point, size: size, public feature: T, public id: number = gameobject_count++) {
         this.collider = new collider(pt, size);
     }
@@ -25,6 +27,8 @@ export abstract class gameobject<T = any> {
     private _end() {
         for (const key of this.events.keys())
             this.unsubscribe_from(key);
+        for (const id of this.timer_events)
+            this.unsubscribe_from_timer(id);
     }
 
     pos() {
@@ -50,4 +54,15 @@ export abstract class gameobject<T = any> {
     notify_all<U extends keyof typeof global_events>(event: U, executer: (cb: (typeof global_events)[U][0][0]) => void) {
         engine.eng.notify_all(event, executer);
     }
+
+    subscribe_to_timer(dt: number, cb: () => void) {
+        this.timer_events.add(setInterval(cb, dt));
+    } 
+
+    unsubscribe_from_timer(id: number) {
+        if (!this.timer_events.has(id))
+            throw `cannot removed timer event with id: ${id}`;
+        clearInterval(id);
+        this.timer_events.delete(id);
+    } 
 }

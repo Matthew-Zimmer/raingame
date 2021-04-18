@@ -1,4 +1,5 @@
 import { collider } from './collider.js';
+import { engine } from './engine.js';
 import { point, size } from './metric.js';
 
 export class asset {
@@ -47,5 +48,9 @@ export class assets {
         if (!this.assets.has(id))
             throw 'bad asset';
         return this.assets.get(id)!;
+    }
+
+    static get(id: string) {
+        return engine.eng.assets.get(id);
     }
 }
