@@ -10,9 +10,9 @@ export interface event_object {
 export function event_server<E extends event_object>(events: E) {
     class _event_server {
         id_count: number = 0;
-        private events = { ...events };
+        private events = JSON.parse(JSON.stringify(events));
     
-        subscribe_to<T extends keyof typeof events>(event: T, callback: E[T][0][0], cond: () => boolean) {
+        subscribe_to<T extends keyof typeof events>(event: T, callback: E[T][0][0], cond = () => true) {
             const id = this.id_count++;
             this.events[event].push([callback, id, cond]);
             return id;

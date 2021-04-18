@@ -45,7 +45,7 @@ export class assets {
 
     get(id: string): asset {
         if (!this.assets.has(id))
-            throw 'bad asset';
+            throw `bad asset: ${id}`;
         return this.assets.get(id)!;
     }
 }
