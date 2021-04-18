@@ -13,6 +13,7 @@ export class rain extends gameobject {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        super.draw(ctx);
         this.texture.draw(ctx, this.collider);
     }
 

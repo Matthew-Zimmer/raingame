@@ -1,5 +1,5 @@
-import { event } from "../../engine/event";
-import { feature } from "../../engine/feature";
+import { event, event_server } from "../../engine/event.js";
+import { feature } from "../../engine/feature.js";
 import { item } from './item.js';
 
 const plant_resouces= {
@@ -33,7 +33,7 @@ export function random_plant_stats(): plant_stats {
    return {
         health: random_number(1, 2),
         maturity : 3,
-        water: random_number(100, 200),
+        water: 3,//random_number(100, 200),
         kind: random_key(plant_resouces),  
     }
 }
@@ -65,6 +65,7 @@ export class plant_feature extends feature({
     }
 
     wateredd() {
+        console.log('wateredd');
         if (++this.watered == this.water) {
             this.grow();
             this.watered = 0;
@@ -72,6 +73,7 @@ export class plant_feature extends feature({
     }
 
     grow() {
+        console.log('growing');
         if (this.growth < this.maturity) {
             this.set_growth(++this.growth);
         }
