@@ -7,7 +7,7 @@ export class collider {
     intersects_with(other: collider): boolean {
         const {x, y} = this.pos;
         const {w, h} = this.size;
-        return [this.pos, { x: x+y, y }, { x, y: y+h }, { x:x+w, y:y+h }].some(x => other.contains(x));
+        return [this.pos, new point(x+y, y), new point(x, y+h), new point(x+w, y+h)].some(x => other.contains(x));
     }
 
     contains(pt: point) {

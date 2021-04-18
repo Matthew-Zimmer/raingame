@@ -16,7 +16,12 @@ export abstract class gameobject<T = any> {
         this.collider = new collider(pt, size);
     }
 
-    draw(ctx: CanvasRenderingContext2D) { }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(this.collider.pos.x, this.collider.pos.y, this.collider.size.w, this.collider.size.h);
+        ctx.restore();
+    }
     update(dt: number) {}
     collided_with(other: gameobject) {}
     clicked(pt: point) {}
