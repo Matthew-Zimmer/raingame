@@ -2,6 +2,7 @@ import { asset } from '../../engine/asset.js';
 import { engine } from '../../engine/engine.js';
 import { gameobject } from '../../engine/gameobject.js';
 import { point } from '../../engine/metric.js';
+import { random_plant_stats } from '../feature/plant.js';
 import { plant } from './plant.js';
 
 export class ground extends gameobject {

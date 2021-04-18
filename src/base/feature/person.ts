@@ -1,7 +1,10 @@
-import { event } from "../../engine/event";
-import { feature } from "../../engine/feature";
-import { point } from "../../engine/metric";
-import { inventory, item, item_kind } from "../component/inventory";
+import { event } from "../../engine/event.js";
+import { feature } from "../../engine/feature.js";
+import { frame_executer, lerp_executer } from "../../engine/frame_executer.js";
+import { point } from "../../engine/metric.js";
+import { random } from "../../engine/random.js";
+import { inventory } from "../component/inventory.js";
+import { item, item_kind } from "../component/item.js";
 
 export interface person_stats {
     readonly speed: number;
@@ -10,6 +13,11 @@ export interface person_stats {
 }
 
 export function random_person_stats(): person_stats {
+    return {
+        speed: random.number(1, 3),
+        strength: random.int(10, 25),
+        passive_hunger_loss: random.number(0.8, 2.4),
+    }
 }
 
 export class person_feature extends feature({
@@ -39,8 +47,10 @@ export class person_feature extends feature({
     }
     
 
-    walk_to(des: point) {
-        return {};
+    walk_to(des: point, pos: (curr?: point) => point): lerp_executer {
+        return new lerp_executer(des, pos, this.speed, (dis: number) => {
+            this.starve(dis / 5);
+        });
     }
 
     is_dead() {
@@ -61,8 +71,10 @@ export class person_feature extends feature({
     collect(resource: { harvest(): item | undefined }) {
         let it: item | undefined;
         if (it = resource.harvest())
-            if (it = this.inv.add(it))
-                world.add_item(it);
+            if (it = this.inv.add(it)) {
+                throw 'drop not implemented yet';
+                // world.add_item(it);
+            }
     }
 
     eat(val: number) {
@@ -93,7 +105,7 @@ export class person_feature extends feature({
         let it: item | undefined;
         if (it = this.inv.get(kind)) {
             this.equipped = it;
-            this.notify_all('on_equipped_item_changed', cb => cb(it));
+            this.notify_all('on_equipped_item_changed', cb => cb(it!));
         }
     }
 }

@@ -1,12 +1,16 @@
-import { event } from "../../engine/event";
-import { feature } from "../../engine/feature";
-import { point } from "../../engine/metric";
+import { event } from "../../engine/event.js";
+import { feature } from "../../engine/feature.js";
+import { point } from "../../engine/metric.js";
+import { random } from "../../engine/random.js";
 
 export interface rain_stats {
     readonly speed: number;
 }
 
 export function random_rain_stats(): rain_stats {
+    return {
+        speed: random.number(10, 20),
+    };
 }
 
 export class rain_feature extends feature({
@@ -21,6 +25,6 @@ export class rain_feature extends feature({
     }
 
     fall(pt: point) {
-        return pt.add(new point(0, this.speed).unit());
+        return pt.add(new point(0, 1).mul(this.speed));
     }
 }

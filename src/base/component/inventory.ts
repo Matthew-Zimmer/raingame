@@ -1,7 +1,4 @@
-
-export type item = {};
-
-export type item_kind = '';
+import { item, item_kind } from './item.js';
 
 export class slot {
     constructor(public max_amount: number, public item?: item){
@@ -27,15 +24,17 @@ export class slot {
         if (this.item === undefined)
             return undefined;
         if (this.item.kind === kind) {
-            const it = { ...this.item };
-            this.item = {};
+            const it = this.item;
+            this.item = undefined;
             return it;
         }
     }
 
     drop() {
-        if (this.item !== undefined)
-            world.add_item(this.item);
+        if (this.item !== undefined) {
+            throw 'drop not implemented yet';
+            //world.add_item(this.item);
+        }
     }
 }
 

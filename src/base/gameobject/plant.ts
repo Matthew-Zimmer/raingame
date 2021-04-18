@@ -1,8 +1,8 @@
-import { asset } from '../engine/asset.js';
-import { engine } from '../engine/engine.js';
-import { gameobject } from '../engine/gameobject.js';
-import { point } from '../engine/metric.js';
-import { plant_feature, plant_stats } from './feature/plant.js';
+import { asset } from '../../engine/asset.js';
+import { engine } from '../../engine/engine.js';
+import { gameobject } from '../../engine/gameobject.js';
+import { point } from '../../engine/metric.js';
+import { plant_feature, plant_stats } from '../feature/plant.js';
 
 
 export class plant extends gameobject<plant_feature> {
@@ -25,8 +25,13 @@ export class plant extends gameobject<plant_feature> {
         }
     }
 
+    private matured = () => {
+        this.notify_all('on_plant_matured', cb => cb(this.pos()));
+    }
+
     start() {
         this.feature.subscribe_to("on_grow", this.update_plant_texture);
+        this.feature.subscribe_to('on_matured', this.matured);
     }
 
     draw(ctx: CanvasRenderingContext2D) {
