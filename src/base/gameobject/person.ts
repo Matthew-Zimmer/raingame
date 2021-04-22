@@ -24,14 +24,15 @@ export class person extends gameobject<person_feature> {
 
     private pick_up_at = async (des: point) => {
         await this.execute(this.feature.walk_to(des, this.get_set_pos));
+        this.feature.idle();
     }
 
     start() {
-        this.subscribe_to_timer(1000, this.starve);
+        this.subscribe_to_timer(30000, this.starve);
 
         this.feature.subscribe_to('on_death', this.die);
 
-        this.subscribe_to('on_plant_matured', this.pick_up_at, () => this.feature.inv.has_space());
+        this.subscribe_to('on_plant_matured', this.pick_up_at, () => this.feature.inv.has_space() && this.feature.is_idling());
     }
 
     draw(ctx: CanvasRenderingContext2D) {

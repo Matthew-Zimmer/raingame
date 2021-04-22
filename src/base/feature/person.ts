@@ -37,6 +37,8 @@ export class person_feature extends feature({
     inv: inventory;
     equipped?: item = undefined;
 
+    current_action: 'idle' | 'walking' = 'idle';
+
     constructor(stats: person_stats) {
         super();
         this.speed = stats.speed;
@@ -48,9 +50,18 @@ export class person_feature extends feature({
     
 
     walk_to(des: point, pos: (curr?: point) => point): lerp_executer {
+        this.current_action = 'walking';
         return new lerp_executer(des, pos, this.speed, (dis: number) => {
             this.starve(dis / 5);
         });
+    }
+
+    is_idling() {
+        return this.current_action === 'idle';
+    }
+
+    idle() {
+        this.current_action = 'idle';
     }
 
     is_dead() {

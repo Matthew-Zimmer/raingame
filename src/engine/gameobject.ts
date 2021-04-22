@@ -83,7 +83,6 @@ export abstract class gameobject<T = any> {
 
     async execute(fe: frame_executer): Promise<void> {
         this.frame_executers.push(fe);
-        console.log('me :(');
         return new Promise<void>((resolve, reject) => {
             fe.mark_done(resolve);
         });
