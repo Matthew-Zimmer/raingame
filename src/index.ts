@@ -1,16 +1,17 @@
-import { spawn_world } from "./base/world.js";
+import { world } from "./base/gameobject/world.js";
 import { engine } from "./engine/engine.js";
 
 const asset_files: string[] = [
-    'raindrop.png',
-    'ground.png',
-    'wheat_1.png',
-    'wheat_2.png',
-    'wheat_3.png',
-    'cabbage_1.png',
-    'cabbage_2.png',
-    'cabbage_3.png',
-    'the_guy.png',
+    'raindrop',
+    'ground',
+    'wheat_1',
+    'wheat_2',
+    'wheat_3',
+    'cabbage_1',
+    'cabbage_2',
+    'cabbage_3',
+    'the_guy',
+    'dead_the_guy'
 ];
 
 export async function start() {
@@ -21,11 +22,11 @@ export async function start() {
 
     const eng = new engine(width, height, canvas);
     
-    await eng.assets.load_images(asset_files.map(x => `assets/${x}`));
+    await eng.assets.load_images(asset_files.map(x => `assets/${x}.png`));
 
-    spawn_world();
+    eng.add(new world());
 
     eng.start();
 }
 
-start();
+start().catch(e => console.error(e));
