@@ -21,7 +21,7 @@ export class person extends gameobject<person_feature> {
     }
 
     private start_praying = async () => {
-        if (this.feature.current_action === 'idle') {
+        if (this.feature.is_idling()) {
             await this.execute(this.feature.pray());
             this.feature.idle();
         }
