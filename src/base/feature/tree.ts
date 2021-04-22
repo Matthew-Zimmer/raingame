@@ -1,62 +1,63 @@
-import { event, event_server } from "../../engine/event.js";
+import { event } from "../../engine/event.js";
 import { feature } from "../../engine/feature.js";
 import { item } from '../component/item.js';
 import { random } from '../../engine/random.js';
 
-const plant_resources= {
-    wheat: new item("wheat", 4),
-    cabbage: new item("cabbage", 2)
+const tree_resources= {
+    oak: new item('oak logs', 4)
 }
 
-export interface plant_stats {
+export interface tree_stats {
     readonly maturity : number;
     readonly water: number;
-    readonly kind: keyof typeof plant_resources;
+    readonly kind: keyof typeof tree_resources;
     readonly health: number;
 }
 
-export function random_plant_stats(): plant_stats {
+export function random_tree_stats(): tree_stats {
     return {
-        health: random.number(1, 2),
+        health: random.number(2, 4),
         maturity : 3,
         water: 3,//random_number(100, 200),
-        kind: random.key(plant_resources),
+        kind: random.key(tree_resources),
     }
 }
 
-export class plant_feature extends feature({
+export class tree_feature extends feature({
     'on_grow': event<(stage: number) => void>(),
     'on_matured': event<() => void>(),
-}) implements plant_stats
+}) implements tree_stats
 {
-    growth = 0;
-    watered = 0;
 
+    growth: number = 0;
+    wetness: number = 0;
+    
     readonly maturity: number;
-    readonly kind: keyof typeof plant_resources;
     readonly water: number;
+    readonly kind: 'oak';
     readonly health: number;
 
-    constructor(stats: plant_stats) {
+    constructor(stats: tree_stats) {
         super();
+
         this.maturity = stats.maturity;
-        this.kind = stats.kind;
         this.water = stats.water;
+        this.kind = stats.kind;
         this.health = stats.health;
     }
     
 
-    private set_growth(val: number){
+    private set_growth(val: number) {
         this.growth = val;
         this.notify_all('on_grow', cb => cb(this.growth));
         if (this.growth === this.maturity)
             this.notify_all('on_matured', cb => cb());
     }
 
-    wateredd() {
-        if (++this.watered === this.water) {
+    hydrate() {
+        if (++this.wetness === this.water) {
             this.grow();
-            this.watered = 0;
+            this.wetness = 0;
         }
     }
 
@@ -69,7 +70,8 @@ export class plant_feature extends feature({
     harvest(): item | undefined {
         if (this.growth === this.maturity) {
             this.set_growth(0);
-            const it = plant_resources[this.kind];
+            this.wetness = 0;
+            const it = tree_resources[this.kind];
             return { ...it, amount: it.amount * this.health };
         }
         return undefined;
