@@ -10,6 +10,7 @@ export interface person_stats {
     readonly speed: number;
     readonly strength: number;
     readonly passive_hunger_loss: number;
+    readonly piety: number;
 }
 
 export function random_person_stats(): person_stats {
@@ -17,6 +18,7 @@ export function random_person_stats(): person_stats {
         speed: random.number(1, 3),
         strength: random.int(10, 25),
         passive_hunger_loss: random.number(0.8, 2.4),
+        piety: random.number(3.5, 5.9),
     }
 }
 
@@ -25,11 +27,13 @@ export class person_feature extends feature({
     'on_hunger_changed': event<(x: number) => void>(),
     'on_health_changed': event<(x: number) => void>(),
     'on_equipped_item_changed': event<(it: item) => void>(),
+    'on_praying': event<(piety: number) => void>(),
 }) implements person_stats {
 
     readonly speed: number;
     readonly strength: number;
     readonly passive_hunger_loss: number;
+    readonly piety: number;
 
     hunger: number = 100;
     health: number = 100;
@@ -37,13 +41,14 @@ export class person_feature extends feature({
     inv: inventory;
     equipped?: item = undefined;
 
-    current_action: 'idle' | 'walking' = 'idle';
+    current_action: 'idle' | 'walking' | 'praying' = 'idle';
 
     constructor(stats: person_stats) {
         super();
         this.speed = stats.speed;
         this.strength = stats.strength;
         this.passive_hunger_loss = stats.passive_hunger_loss;
+        this.piety = stats.piety;
 
         this.inv = new inventory(this.strength);
     }
@@ -54,6 +59,13 @@ export class person_feature extends feature({
         return new lerp_executer(des, pos, this.speed, (dis: number) => {
             this.starve(dis / 5);
         });
+    }
+
+    pray() {
+        this.current_action = 'praying';
+        return new frame_executer(random.number(60, 360), () => {
+            this.notify_all('on_praying', cb => cb(this.piety));
+        }) ;
     }
 
     is_idling() {
