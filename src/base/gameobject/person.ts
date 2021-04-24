@@ -20,6 +20,17 @@ export class person extends gameobject<person_feature> {
         this.feature.starve(this.feature.passive_hunger_loss);
     }
 
+    private start_praying = async () => {
+        if (this.feature.is_idling()) {
+            await this.execute(this.feature.pray());
+            this.feature.idle();
+        }
+    }
+
+    private pray = (piety: number) => {
+        this.notify_all('on_prayed', cb => cb(piety));
+    }
+
     private get_set_pos = (curr?: point) => curr ? this.collider.pos = curr : this.pos();
 
     private pick_up_at = async (des: point) => {
@@ -29,8 +40,10 @@ export class person extends gameobject<person_feature> {
 
     start() {
         this.subscribe_to_timer(30000, this.starve);
+        this.subscribe_to_timer(10000, this.start_praying);
 
         this.feature.subscribe_to('on_death', this.die);
+        this.feature.subscribe_to('on_praying', this.pray);
 
         this.subscribe_to('on_plant_matured', this.pick_up_at, () => this.feature.inv.has_space() && this.feature.is_idling());
     }
