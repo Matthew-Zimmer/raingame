@@ -11,7 +11,13 @@ const asset_files: string[] = [
     'cabbage_2',
     'cabbage_3',
     'the_guy',
-    'dead_the_guy'
+    'dead_the_guy',
+    'tree_1',
+    'tree_2',
+    'tree_3',
+    'lightning',
+    'lightning_button',
+    'rain_button',
 ];
 
 export async function start() {

@@ -1,5 +1,4 @@
 import { asset, assets } from '../../engine/asset.js';
-import { engine } from '../../engine/engine.js';
 import { gameobject } from '../../engine/gameobject.js';
 import { point } from '../../engine/metric.js';
 import { person_feature, person_stats } from '../feature/person.js';

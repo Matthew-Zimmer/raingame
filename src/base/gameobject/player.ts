@@ -1,15 +1,14 @@
-import { asset } from "../../engine/asset";
-import { ctgo } from "../../engine/ctgo";
-import { engine } from "../../engine/engine";
-import { gameobject } from "../../engine/gameobject";
-import { point } from "../../engine/metric";
-import { button } from "../../engine/ui/button";
-import { spell, spell_kind } from "../component/spell";
-import { random_lightning_stats } from "../feature/lightning";
-import { player_feature } from "../feature/player";
-import { random_rain_stats } from "../feature/rain";
-import { lightning } from "./lightning";
-import { rain } from "./rain";
+import { ctgo } from "../../engine/ctgo.js";
+import { engine } from "../../engine/engine.js";
+import { gameobject } from "../../engine/gameobject.js";
+import { point } from "../../engine/metric.js";
+import { button } from "../../engine/ui/button.js";
+import { spell, spell_kind } from "../component/spell.js";
+import { random_lightning_stats } from "../feature/lightning.js";
+import { player_feature } from "../feature/player.js";
+import { random_rain_stats } from "../feature/rain.js";
+import { lightning } from "./lightning.js";
+import { rain } from "./rain.js";
 
 class spell_converter extends ctgo({
     rain: ({ pt }) => new rain(pt, random_rain_stats()),

@@ -1,8 +1,7 @@
-import { event } from "../../engine/event";
-import { feature } from "../../engine/feature";
-import { point } from "../../engine/metric";
-import { spell, spell_book, spell_kind } from "../component/spell";
-import { rain } from "../gameobject/rain";
+import { event } from "../../engine/event.js";
+import { feature } from "../../engine/feature.js";
+import { point } from "../../engine/metric.js";
+import { spell, spell_book, spell_kind } from "../component/spell.js";
 
 export class player_feature extends feature({
     on_spell_gained: event<(spell: spell) => void>(),
