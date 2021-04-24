@@ -41,7 +41,7 @@ export class player extends gameobject<player_feature> {
         if (this.open)
             this.draw_spells(ctx);
     }
-    //draw
+    //draw todo
     draw_spells(ctx: CanvasRenderingContext2D) {
         
     }
