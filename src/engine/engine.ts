@@ -1,6 +1,6 @@
 import { assets } from './asset.js';
 import { event_server } from './event.js';
-import { gameobject } from './gameobject.js';
+import { gameobject, key_code } from './gameobject.js';
 import { global_events } from './global_events.js';
 import { point } from './metric.js';
 
@@ -126,5 +126,9 @@ export class engine extends event_server(global_events) {
     }
 
     private handle_key_down(e: KeyboardEvent) {
+        if (e.repeat)
+            return;
+        for (const g of this.gameobjects)
+            g.notify_key_down(e.key as key_code);
     }
 }

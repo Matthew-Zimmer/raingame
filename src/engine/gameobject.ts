@@ -6,13 +6,15 @@ import { point, size } from './metric.js';
 
 let gameobject_count = 0;
 
+export type key_code = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '`' | '-' | '=' | '[' | ']' | '\\' | ';' | '\'' | ',' | '.' | '/' | 'Tab' | 'Shift' | 'Backspace' | 'Enter' | 'Control';  
+
 export abstract class gameobject<T = any> {
     public collider: collider;
 
     private events: Map<keyof typeof global_events, number> = new Map();
 
     private timer_events: Set<number> = new Set();
-    private key_down_events: Map<string, () => void> = new Map();
+    private key_down_events: Map<key_code, () => void> = new Map();
 
     private frame_executers: frame_executer[] = [];
 
@@ -89,18 +91,18 @@ export abstract class gameobject<T = any> {
         });
     }
 
-    notify_key_down(key: string) {
+    notify_key_down(key: key_code) {
         if (this.key_down_events.has(key))
             this.key_down_events.get(key)!();
     }
 
-    subscribe_to_key_down_event(key: string, cb: () => void) {
+    subscribe_to_key_down_event(key: key_code, cb: () => void) {
         if (this.key_down_events.has(key))
             throw `already subscribed to key down event with key: ${key}`;
         this.key_down_events.set(key, cb);
     }
 
-    unsubscribe_from_key_down_event(key: string) {
+    unsubscribe_from_key_down_event(key: key_code) {
         if (!this.key_down_events.has(key))
             throw `can not unsubscribed from key down event with key: ${key}`;
         this.key_down_events.delete(key);
