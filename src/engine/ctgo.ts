@@ -1,5 +1,5 @@
-import { gameobject } from "./gameobject";
-import { point } from "./metric";
+import { gameobject } from "./gameobject.js";
+import { point } from "./metric.js";
 
 export interface creation_args {
     pt: point
