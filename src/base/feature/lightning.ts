@@ -1,4 +1,3 @@
-import { event } from "../../engine/event.js";
 import { feature } from "../../engine/feature.js";
 import { point } from "../../engine/metric.js";
 import { random } from "../../engine/random.js";
