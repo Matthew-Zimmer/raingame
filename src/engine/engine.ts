@@ -24,6 +24,7 @@ export class engine extends event_server(global_events) {
         canvas.width = this.width;
         canvas.height = this.height;
         canvas.onclick = (e) => this.handle_click(e);
+        canvas.onkeydown = (e) => this.handle_key_down(e);
         this.ctx = canvas.getContext('2d')!;
         engine.eng = this;
     }
@@ -122,5 +123,8 @@ export class engine extends event_server(global_events) {
                 break;
             }
         }
+    }
+
+    private handle_key_down(e: KeyboardEvent) {
     }
 }
