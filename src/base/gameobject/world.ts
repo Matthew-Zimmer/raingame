@@ -4,7 +4,7 @@ import { point } from "../../engine/metric.js";
 import { random_person_stats } from "../feature/person.js";
 import { ground } from "./ground.js";
 import { person } from "./person.js";
-import { skybox } from "./skybox.js";
+import { player } from "./player.js";
 
 export class world extends gameobject {
     constructor() {
@@ -15,7 +15,7 @@ export class world extends gameobject {
         const ground_height = 64;
         const person_height = 128;
 
-        engine.eng.add(new skybox());
+        engine.eng.add(new player());
         for (let i = 0; i < w / 64; i++)
             engine.eng.add(new ground(new point(i * 64, h - ground_height)));
         this.subscribe_to_timer(5000, () => {
