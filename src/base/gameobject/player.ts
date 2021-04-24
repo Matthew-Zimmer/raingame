@@ -1,9 +1,20 @@
 import { asset } from "../../engine/asset";
+import { ctgo } from "../../engine/ctgo";
 import { engine } from "../../engine/engine";
 import { gameobject } from "../../engine/gameobject";
 import { point } from "../../engine/metric";
 import { spell, spell_kind } from "../component/spell";
+import { random_lightning_stats } from "../feature/lightning";
 import { player_feature } from "../feature/player";
+import { random_rain_stats } from "../feature/rain";
+import { lightning } from "./lightning";
+import { rain } from "./rain";
+
+class spell_converter extends ctgo({
+    rain: ({ pt }) => new rain(pt, random_rain_stats()),
+    lightning: ({ pt }) => new lightning(pt, random_lightning_stats()),
+}) {}
+
 
 export class player extends gameobject<player_feature> {
     open: boolean = false;
@@ -21,19 +32,18 @@ export class player extends gameobject<player_feature> {
     }
     
     clicked(pt: point) {   
-        new this.active_spell()
-        engine.eng.add(
+        const converter = new spell_converter(); 
+        return converter.convert(this.active_spell(), { pt });
     }
 
     draw(ctx: CanvasRenderingContext2D) {
         super.draw(ctx);
-        if(this.open)
-        {
+        if (this.open)
             this.draw_spells(ctx);
-        }
     }
-    draw_spells(ctx: CanvasRenderingContext2D){
-        ctx.
+    //draw
+    draw_spells(ctx: CanvasRenderingContext2D) {
+        
     }
 
     active_spell() : spell{
@@ -41,11 +51,9 @@ export class player extends gameobject<player_feature> {
     }
 
     change_spell(kind: spell_kind){
-        for(let i = 0; i < this.feature.spells.length; i++) {
-            if(this.feature.spells[i].name === kind) {
+        for (let i = 0; i < this.feature.spells.length; i++)
+            if (this.feature.spells[i].kind === kind)
                 this.active = i;
-            }
-        }
         return this.active;
     }
 

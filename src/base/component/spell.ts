@@ -2,7 +2,7 @@
 export type spell_kind = 'rain' | 'lightning';
 
 export class spell {
-    constructor(public name: spell_kind, public mana_cost: number) {
+    constructor(public kind: spell_kind, public mana_cost: number) {
     }
 }
 
