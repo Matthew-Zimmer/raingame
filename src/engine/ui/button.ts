@@ -1,6 +1,6 @@
-import { asset, assets } from "../asset";
-import { gameobject } from "../gameobject";
-import { point } from "../metric";
+import { asset, assets } from "../asset.js";
+import { gameobject } from "../gameobject.js";
+import { point } from "../metric.js";
 
 export class button extends gameobject {
 
