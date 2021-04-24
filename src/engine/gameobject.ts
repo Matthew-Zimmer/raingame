@@ -12,6 +12,7 @@ export abstract class gameobject<T = any> {
     private events: Map<keyof typeof global_events, number> = new Map();
 
     private timer_events: Set<number> = new Set();
+    private key_down_events: Map<string, () => void> = new Map();
 
     private frame_executers: frame_executer[] = [];
 
@@ -86,5 +87,22 @@ export abstract class gameobject<T = any> {
         return new Promise<void>((resolve, reject) => {
             fe.mark_done(resolve);
         });
+    }
+
+    notify_key_down(key: string) {
+        if (this.key_down_events.has(key))
+            this.key_down_events.get(key)!();
+    }
+
+    subscribe_to_key_down_event(key: string, cb: () => void) {
+        if (this.key_down_events.has(key))
+            throw `already subscribed to key down event with key: ${key}`;
+        this.key_down_events.set(key, cb);
+    }
+
+    unsubscribe_from_key_down_event(key: string) {
+        if (!this.key_down_events.has(key))
+            throw `can not unsubscribed from key down event with key: ${key}`;
+        this.key_down_events.delete(key);
     }
 }
