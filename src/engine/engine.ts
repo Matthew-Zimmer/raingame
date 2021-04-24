@@ -1,6 +1,6 @@
 import { assets } from './asset.js';
 import { event_server } from './event.js';
-import { gameobject } from './gameobject.js';
+import { gameobject, key_code } from './gameobject.js';
 import { global_events } from './global_events.js';
 import { point } from './metric.js';
 
@@ -24,6 +24,7 @@ export class engine extends event_server(global_events) {
         canvas.width = this.width;
         canvas.height = this.height;
         canvas.onclick = (e) => this.handle_click(e);
+        canvas.onkeydown = (e) => this.handle_key_down(e);
         this.ctx = canvas.getContext('2d')!;
         engine.eng = this;
     }
@@ -122,5 +123,12 @@ export class engine extends event_server(global_events) {
                 break;
             }
         }
+    }
+
+    private handle_key_down(e: KeyboardEvent) {
+        if (e.repeat)
+            return;
+        for (const g of this.gameobjects)
+            g.notify_key_down(e.key as key_code);
     }
 }
